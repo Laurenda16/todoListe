@@ -2,15 +2,27 @@
   <h1>Planification des taches</h1>
 <form action="" @submit.prevent="ajouterTache">
   <fieldset role="group">
-  <input type="text" placeholder="Tache a Effectuer" v-model="todo">
-  <button>AjouterTache</button>
+  <input type="text" placeholder="Tache a Effectuer" v-model="newTodo">
+  <button :disabled="newTodo.length==0">Ajouter</button>
 
 </fieldset>
 </form>
 
 
   <div v-if="todos.length==0">Vous n'avez aucune tache a faire</div>
-  
+<div v-else>
+  <ul>
+    <li v-for="todo of todos" :key="todo.date" :class ="{completed: todo.completed}">
+      <label>
+        <input type="checkbox" v-model="todo.completed">   {{ todo.title }}
+      </label>
+     
+    </li>
+    
+    
+  </ul>
+
+</div>
 
 </template>
 
@@ -18,23 +30,37 @@
 import { ref } from 'vue';
 
 const variable = ref();
-const todos=ref([])
-const todo= ref('');
+const todos=ref([
+ {
+  title:'Faux ajouter les taches a faire',
+      completed: true,
+      date:1
+
+ }
+])
+const newTodo= ref('');
 const ajouterTache=()=>
 {
   //recupere la tache saisi
   todos.value.push(
     {
-      title:todo.value,
+      title:newTodo.value,
       completed: false,
       date:Date.now()
     }
   )
+  newTodo.value='';
 }
+
 
 
 
 </script>
 
 <style>
+.completed
+{
+  opacity: .5;
+  text-decoration: line-through;
+}
 </style>
