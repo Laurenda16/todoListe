@@ -12,7 +12,7 @@
   <div v-if="todos.length==0">Vous n'avez aucune tache a faire</div>
 <div v-else>
   <ul>
-    <li v-for="todo of todos" :key="todo.date" :class ="{completed: todo.completed}">
+    <li v-for="todo of sortedTodo()" :key="todo.date" :class ="{completed: todo.completed}">
       <label>
         <input type="checkbox" v-model="todo.completed">   {{ todo.title }}
       </label>
@@ -21,6 +21,11 @@
     
     
   </ul>
+  <div>
+    <label for="">
+      <input type="checkbox" name="" id="" v-model="hideCompleted">masquer les taches completes
+    </label>
+  </div>
 
 </div>
 
@@ -39,6 +44,7 @@ const todos=ref([
  }
 ])
 const newTodo= ref('');
+const hideCompleted=ref(false)
 const ajouterTache=()=>
 {
   //recupere la tache saisi
@@ -52,6 +58,16 @@ const ajouterTache=()=>
   newTodo.value='';
 }
 
+const sortedTodo=()=>
+{
+const sortedTodos= todos.value.toSorted((a,b)=> a.completed>b.completed?1:-1)
+
+if(hideCompleted.value === true)
+{
+return sortedTodos.filter(t=> t.completed === false)
+}
+return sortedTodos;
+}
 
 
 
