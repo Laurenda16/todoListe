@@ -12,7 +12,7 @@
   <div v-if="todos.length==0">Vous n'avez aucune tache a faire</div>
 <div v-else>
   <ul>
-    <li v-for="todo of sortedTodo()" :key="todo.date" :class ="{completed: todo.completed}">
+    <li v-for="todo of sortedTodo" :key="todo.date" :class ="{completed: todo.completed}">
       <label>
         <input type="checkbox" v-model="todo.completed">   {{ todo.title }}
       </label>
@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 const variable = ref();
 const todos=ref([
@@ -58,7 +58,7 @@ const ajouterTache=()=>
   newTodo.value='';
 }
 
-const sortedTodo=()=>
+const sortedTodo= computed(()=>
 {
 const sortedTodos= todos.value.toSorted((a,b)=> a.completed>b.completed?1:-1)
 
@@ -67,11 +67,12 @@ if(hideCompleted.value === true)
 return sortedTodos.filter(t=> t.completed === false)
 }
 return sortedTodos;
-}
+})
 
 
 
 </script>
+
 
 <style>
 .completed
